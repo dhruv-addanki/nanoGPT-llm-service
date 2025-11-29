@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    image: nanogpt-llm-service:latest
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      # - MODEL_PATH=/models/ckpt.pt  # mount your checkpoint if needed
+      - MOCK_MODEL=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+      # - ./models:/models

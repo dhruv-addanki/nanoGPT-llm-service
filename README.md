@@ -16,6 +16,17 @@ The simplest, fastest repository for training/finetuning medium-sized GPTs. It i
 
 Because the code is so simple, it is very easy to hack to your needs, train new models from scratch, or finetune pretrained checkpoints (e.g. biggest one currently available as a starting point would be the GPT-2 1.3B model from OpenAI).
 
+## Mini LLM Service (Inference API)
+
+This fork layers a small FastAPI-based inference service on top of the original nanoGPT training code. The training scripts remain unchanged; the service lives under `service/` with clean configuration, logging, and optional streaming responses.
+
+- Architecture overview: `docs/architecture.md`
+- Run locally (mock model for fast startup): `MOCK_MODEL=true python scripts/run_server.py --host 0.0.0.0 --port 8000`
+- Generate (non-streaming): `curl -X POST http://localhost:8000/generate -H "Content-Type: application/json" -d '{"prompt":"Hello nanoGPT","max_new_tokens":16}'`
+- Stream via Server-Sent Events: `curl -N "http://localhost:8000/generate/stream?prompt=Hello%20nanoGPT&max_new_tokens=16"`
+- Docker: `docker build -t nanogpt-llm-service .` then `docker run -p 8000:8000 nanogpt-llm-service`
+- Tests: `pytest tests`
+
 ## install
 
 ```
